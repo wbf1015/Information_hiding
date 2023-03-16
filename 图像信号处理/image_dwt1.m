@@ -1,5 +1,5 @@
 % lena图像的一级小波变换
-b=imread('lena.bmp');
+b=imread('test.bmp');
 a=rgb2gray(b);
 nbcol=size(a,1);
 [ca1,ch1,cv1,cd1]=dwt2(a,'db4');

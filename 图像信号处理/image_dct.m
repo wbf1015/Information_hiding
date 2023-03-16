@@ -1,4 +1,4 @@
-a=imread('lena.bmp');%读入图像，像素值在b中
+a=imread('test.bmp');%读入图像，像素值在b中
 b=im2bw(a);%转换为二值图像
 figure;
 imshow(b);
