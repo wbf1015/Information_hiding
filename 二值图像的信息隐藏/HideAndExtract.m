@@ -22,13 +22,13 @@ function HideAndExtract()
 end
 
 
-function out = BlackNum (x, i, j) 
+function out = BlackNum (x, index_row, index_col) 
     %计算区域内黑色块的数量 
     [~,n]=size(x);
 
     ny=n/2;
 
-    count_in_y=(i-1)*ny+j;
+    count_in_y=(index_row-1)*ny+index_col;
 
     k=count_in_y*4-3; %对应到x中的第几个像素?
     
@@ -47,13 +47,13 @@ function out = BlackNum (x, i, j)
 end 
 
 
-function result=change_to_0(x,i,j,tem)
+function result=change_to_0(x,index_row,index_col,tem)
     %计算区域内黑色块的数量 
     [~,n]=size(x);
 
     ny=n/2;
 
-    count_in_y=(i-1)*ny+j;
+    count_in_y=(index_row-1)*ny+index_col;
 
     k=count_in_y*4-3; %对应到中的第几个像素
     
@@ -105,13 +105,13 @@ function result=change_to_0(x,i,j,tem)
 end
 
 
-function result=change_to_1(x,i,j,tem)
+function result=change_to_1(x,index_row,index_col,tem)
     %计算区域内黑色块的数量 
     [~,n]=size(x);
 
     ny=n/2;
 
-    count_in_y=(i-1)*ny+j;
+    count_in_y=(index_row-1)*ny+index_col;
 
     k=count_in_y*4-3; %对应到x中的第几个像素?
     
@@ -164,16 +164,16 @@ end
 
 
 function result=Hide(x,m,n,y)
-    for i=1:m
-        for j=1:n
-            tem=BlackNum(x,i,j);
-            if y(i,j)==0 %要隐藏黑像素
+    for index_row=1:m
+        for index_col=1:n
+            tem=BlackNum(x,index_row,index_col);
+            if y(index_row,index_col)==0 %要隐藏黑像素
                 if tem==1 || tem==2 || tem==4   %改成三黑，三黑不用管?
-                    x=change_to_0(x,i,j,tem);
+                    x=change_to_0(x,index_row,index_col,tem);
                 end
-            elseif y(i,j)==1 %要 隐 藏 白 像 素
+            elseif y(index_row,index_col)==1 %要 隐 藏 白 像 素
                 if tem==0 || tem==2 || tem==3 %改成三白三白 （一 黑）不用管?
-                    x=change_to_1(x,i,j,tem);
+                    x=change_to_1(x,index_row,index_col,tem);
                 end
             end
         end
@@ -189,17 +189,17 @@ function out=Extract()
     [m, n]= size(c); 
     secret = zeros(m/2 , n/2);
 
-    for i =1:m/2
-        for j =1:n/2
-            tem=BlackNum(c,i,j);
+    for index_row =1:m/2
+        for index_col =1:n/2
+            tem=BlackNum(c,index_row,index_col);
             if tem==1
-                secret(i,j)=1;
+                secret(index_row,index_col)=1;
             elseif tem==3
-                secret(i,j)=0;
+                secret(index_row,index_col)=0;
             elseif tem==0
-                secret(i,j)=0;
+                secret(index_row,index_col)=0;
             elseif tem==4
-                secret(i,j)=1;
+                secret(index_row,index_col)=1;
             end
         end 
     end
