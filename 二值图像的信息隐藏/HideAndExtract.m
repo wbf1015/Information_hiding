@@ -47,7 +47,7 @@ function out = BlackNum (x, index_row, index_col)
 end 
 
 
-function result=change_to_0(x,index_row,index_col,tem)
+function result=change_to_0(x,index_row,index_col,state)
     %计算区域内黑色块的数量 
     [~,n]=size(x);
 
@@ -63,7 +63,7 @@ function result=change_to_0(x,index_row,index_col,tem)
     mx=idivide(int32(k),int32(n),"ceil");
     my=k-(mx-1)*n;
     
-    if tem==1
+    if state==1
         %随机增加两个黑?
         rand1=int8(rand()*2+1);
         rand2=int8(rand()*2+1);
@@ -82,7 +82,7 @@ function result=change_to_0(x,index_row,index_col,tem)
             end
         end
 
-    elseif tem==2
+    elseif state==2
         %随机增加一个黑
         randk=int8(rand()+1);
         t=0;
@@ -95,7 +95,7 @@ function result=change_to_0(x,index_row,index_col,tem)
             end
         end
 
-    elseif tem==4
+    elseif state==4
         %随机减去一个黑
         randk=int32(rand()*3);
         x(mx,my+randk)=1;
@@ -105,7 +105,7 @@ function result=change_to_0(x,index_row,index_col,tem)
 end
 
 
-function result=change_to_1(x,index_row,index_col,tem)
+function result=change_to_1(x,index_row,index_col,state)
     %计算区域内黑色块的数量 
     [~,n]=size(x);
 
@@ -121,12 +121,12 @@ function result=change_to_1(x,index_row,index_col,tem)
     mx=idivide(int32(k),int32(n),"ceil");
     my=k-(mx-1)*n;
     
-    if tem==0
+    if state==0
        %随机增加一个黑
         randk=int32(rand()*3);
         x(mx,my+randk)=0;
 
-    elseif tem==2
+    elseif state==2
        %随机减去一个黑
         randk=int8(rand()+1);
         t=0;
@@ -139,7 +139,7 @@ function result=change_to_1(x,index_row,index_col,tem)
             end
         end
 
-    elseif tem==3
+    elseif state==3
         %随机减去两个黑
         rand1=int8(rand()*2+1);
         rand2=int8(rand()*2+1);
@@ -166,14 +166,14 @@ end
 function result=Hide(x,m,n,y)
     for index_row=1:m
         for index_col=1:n
-            tem=BlackNum(x,index_row,index_col);
+            state=BlackNum(x,index_row,index_col);
             if y(index_row,index_col)==0 %要隐藏黑像素
-                if tem==1 || tem==2 || tem==4   %改成三黑，三黑不用管?
-                    x=change_to_0(x,index_row,index_col,tem);
+                if state==1 || state==2 || state==4   %改成三黑，三黑不用管?
+                    x=change_to_0(x,index_row,index_col,state);
                 end
             elseif y(index_row,index_col)==1 %要 隐 藏 白 像 素
-                if tem==0 || tem==2 || tem==3 %改成三白三白 （一 黑）不用管?
-                    x=change_to_1(x,index_row,index_col,tem);
+                if state==0 || state==2 || state==3 %改成三白三白 （一 黑）不用管?
+                    x=change_to_1(x,index_row,index_col,state);
                 end
             end
         end
@@ -191,14 +191,14 @@ function out=Extract()
 
     for index_row =1:m/2
         for index_col =1:n/2
-            tem=BlackNum(c,index_row,index_col);
-            if tem==1
+            state=BlackNum(c,index_row,index_col);
+            if state==1
                 secret(index_row,index_col)=1;
-            elseif tem==3
+            elseif state==3
                 secret(index_row,index_col)=0;
-            elseif tem==0
+            elseif state==0
                 secret(index_row,index_col)=0;
-            elseif tem==4
+            elseif state==4
                 secret(index_row,index_col)=1;
             end
         end 
